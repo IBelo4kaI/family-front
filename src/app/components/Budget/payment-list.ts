@@ -31,6 +31,9 @@ export interface SettleEvent {
                   }
                 </div>
               }
+              @if (item.yearlyAmount !== undefined) {
+                <div class="meta">В год: {{ item.yearlyAmount | money }}</div>
+              }
               @if (item.creditLimit !== undefined) {
                 <div class="meta">Лимит: {{ item.creditLimit | money }}</div>
               }

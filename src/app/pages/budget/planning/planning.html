@@ -36,15 +36,26 @@
     @for (goal of store.goals(); track goal.id) {
       <li>
         <div class="row">
-          <span class="name">{{ goal.name }} · до {{ goal.deadline | shortDate }}</span>
-          <span>{{ goal.saved | money }} / {{ goal.target | money }}</span>
+          <span class="name">
+            {{ goal.name }}
+            @if (goal.deadline) {
+              · до {{ goal.deadline | shortDate }}
+            }
+          </span>
+          @if (goal.target !== null) {
+            <span>{{ goal.saved | money }} / {{ goal.target | money }}</span>
+          } @else {
+            <span>{{ goal.saved | money }}</span>
+          }
         </div>
-        <progress
-          [value]="goal.saved"
-          [max]="goal.target || 1"
-          [attr.aria-label]="goal.name"
-          [attr.aria-valuetext]="(goal.saved | money) + ' из ' + (goal.target | money)"
-        ></progress>
+        @if (goal.target !== null) {
+          <progress
+            [value]="goal.saved"
+            [max]="goal.target || 1"
+            [attr.aria-label]="goal.name"
+            [attr.aria-valuetext]="(goal.saved | money) + ' из ' + (goal.target | money)"
+          ></progress>
+        }
         <div class="links">
           <a [routerLink]="['goals', goal.id, 'top-up']">Пополнить</a>
           <a [routerLink]="['goals', goal.id, 'edit']">Изменить</a>

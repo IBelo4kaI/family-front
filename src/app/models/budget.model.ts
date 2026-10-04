@@ -63,9 +63,9 @@ export type NewCategoryLimit = Omit<CategoryLimit, 'id'>;
 export interface SavingsGoal {
   id: string;
   name: string;
-  target: number;
+  target: number | null;
   saved: number;
-  deadline: string;
+  deadline: string | null;
   scope: BudgetScope;
 }
 
@@ -130,6 +130,7 @@ export interface PaymentView {
   date: string;
   closeLabel: string;
   totalAmount?: number;
+  yearlyAmount?: number;
   endDate?: string;
   creditLimit?: number;
   pending: boolean;

@@ -1,4 +1,8 @@
-<app-page-header [title]="isEdit ? 'Редактирование цели' : 'Новая цель'" backLink="/budget/planning" backLabel="Назад к лимитам и целям" />
+<app-page-header
+  [title]="isEdit ? 'Редактирование цели' : 'Новая цель'"
+  backLink="/budget/planning"
+  backLabel="Назад к лимитам и целям"
+/>
 
 <form [formRoot]="goalForm">
   <div class="field">
@@ -8,7 +12,9 @@
       type="text"
       autocomplete="off"
       [formField]="goalForm.name"
-      [attr.aria-describedby]="goalForm.name().touched() && goalForm.name().invalid() ? 'name-error' : null"
+      [attr.aria-describedby]="
+        goalForm.name().touched() && goalForm.name().invalid() ? 'name-error' : null
+      "
     />
     @if (goalForm.name().touched() && goalForm.name().invalid()) {
       <p class="error" id="name-error" role="alert">{{ goalForm.name().errors()[0].message }}</p>
@@ -16,19 +22,32 @@
   </div>
 
   <div class="field">
-    <label for="target">Целевая сумма, ₽</label>
-    <input
-      id="target"
-      type="number"
-      inputmode="decimal"
-      step="0.01"
-      [formField]="goalForm.target"
-      [attr.aria-describedby]="goalForm.target().touched() && goalForm.target().invalid() ? 'target-error' : null"
-    />
-    @if (goalForm.target().touched() && goalForm.target().invalid()) {
-      <p class="error" id="target-error" role="alert">{{ goalForm.target().errors()[0].message }}</p>
-    }
+    <label>
+      <input type="checkbox" [formField]="goalForm.withTarget" />
+      Есть целевая сумма и срок
+    </label>
   </div>
+
+  @if (model().withTarget) {
+    <div class="field">
+      <label for="target">Целевая сумма, ₽</label>
+      <input
+        id="target"
+        type="number"
+        inputmode="decimal"
+        step="0.01"
+        [formField]="goalForm.target"
+        [attr.aria-describedby]="
+          goalForm.target().touched() && goalForm.target().invalid() ? 'target-error' : null
+        "
+      />
+      @if (goalForm.target().touched() && goalForm.target().invalid()) {
+        <p class="error" id="target-error" role="alert">
+          {{ goalForm.target().errors()[0].message }}
+        </p>
+      }
+    </div>
+  }
 
   <div class="field">
     <label for="saved">Уже накоплено, ₽</label>
@@ -38,25 +57,33 @@
       inputmode="decimal"
       step="0.01"
       [formField]="goalForm.saved"
-      [attr.aria-describedby]="goalForm.saved().touched() && goalForm.saved().invalid() ? 'saved-error' : null"
+      [attr.aria-describedby]="
+        goalForm.saved().touched() && goalForm.saved().invalid() ? 'saved-error' : null
+      "
     />
     @if (goalForm.saved().touched() && goalForm.saved().invalid()) {
       <p class="error" id="saved-error" role="alert">{{ goalForm.saved().errors()[0].message }}</p>
     }
   </div>
 
-  <div class="field">
-    <label for="deadline">Срок</label>
-    <input
-      id="deadline"
-      type="date"
-      [formField]="goalForm.deadline"
-      [attr.aria-describedby]="goalForm.deadline().touched() && goalForm.deadline().invalid() ? 'deadline-error' : null"
-    />
-    @if (goalForm.deadline().touched() && goalForm.deadline().invalid()) {
-      <p class="error" id="deadline-error" role="alert">{{ goalForm.deadline().errors()[0].message }}</p>
-    }
-  </div>
+  @if (model().withTarget) {
+    <div class="field">
+      <label for="deadline">Срок</label>
+      <input
+        id="deadline"
+        type="date"
+        [formField]="goalForm.deadline"
+        [attr.aria-describedby]="
+          goalForm.deadline().touched() && goalForm.deadline().invalid() ? 'deadline-error' : null
+        "
+      />
+      @if (goalForm.deadline().touched() && goalForm.deadline().invalid()) {
+        <p class="error" id="deadline-error" role="alert">
+          {{ goalForm.deadline().errors()[0].message }}
+        </p>
+      }
+    </div>
+  }
 
   @if (personalEnabled) {
     <fieldset>

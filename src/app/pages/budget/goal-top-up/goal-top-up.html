@@ -1,7 +1,7 @@
 <app-page-header title="Пополнение цели" backLink="/budget/planning" backLabel="Назад к лимитам и целям" />
 
 @if (goal) {
-  <p>{{ goal.name }}: {{ goal.saved | money }} из {{ goal.target | money }}</p>
+  <p>{{ goal.name }}: {{ goal.saved | money }}@if (goal.target !== null) { из {{ goal.target | money }} }</p>
 }
 
 <form [formRoot]="topUpForm">

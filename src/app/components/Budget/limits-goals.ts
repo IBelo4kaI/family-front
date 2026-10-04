@@ -31,14 +31,23 @@ import { LimitProgress, SavingsGoal } from '@/models/budget.model';
     <h3>Цели накопления</h3>
     @for (goal of goals(); track goal.id) {
       <div class="row">
-        <span>{{ goal.name }} · до {{ goal.deadline | shortDate }}</span>
-        <span>{{ goal.saved | money }} / {{ goal.target | money }}</span>
-        <progress
-          [value]="goal.saved"
-          [max]="goal.target || 1"
-          [attr.aria-label]="goal.name"
-          [attr.aria-valuetext]="(goal.saved | money) + ' из ' + (goal.target | money)"
-        ></progress>
+        <span>
+          {{ goal.name }}
+          @if (goal.deadline) {
+            · до {{ goal.deadline | shortDate }}
+          }
+        </span>
+        @if (goal.target !== null) {
+          <span>{{ goal.saved | money }} / {{ goal.target | money }}</span>
+          <progress
+            [value]="goal.saved"
+            [max]="goal.target || 1"
+            [attr.aria-label]="goal.name"
+            [attr.aria-valuetext]="(goal.saved | money) + ' из ' + (goal.target | money)"
+          ></progress>
+        } @else {
+          <span>{{ goal.saved | money }}</span>
+        }
       </div>
     } @empty {
       <p class="empty">Целей пока нет</p>

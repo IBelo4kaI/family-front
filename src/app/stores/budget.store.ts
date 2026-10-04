@@ -182,6 +182,7 @@ export class BudgetStore {
         pending: p.status === 'active' && p.nextDate <= today,
         closeLabel: p.kind === 'loan' ? 'Погашен' : 'Отменить',
         totalAmount: p.totalAmount,
+        yearlyAmount: p.kind === 'subscription' && p.period === 'month' ? p.amount * 12 : undefined,
         endDate: p.endDate,
         closed: p.status === 'closed',
       }))

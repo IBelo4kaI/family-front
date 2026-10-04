@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { PageHeader } from '@/components/Layout/page-header';
-import { FormField, FormRoot, form, max, min, required } from '@angular/forms/signals';
+import { FormField, FormRoot, applyWhen, form, max, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { BudgetScope } from '@/models/budget.model';
@@ -29,7 +29,8 @@ export class GoalForm {
   protected readonly personalEnabled = PERSONAL_MODE_ENABLED;
   protected readonly model = signal({
     name: this.existing?.name ?? '',
-    target: (this.existing ? toRubles(this.existing.target) : null) as number | null,
+    withTarget: this.existing ? this.existing.target !== null : true,
+    target: (this.existing?.target != null ? toRubles(this.existing.target) : null) as number | null,
     saved: (this.existing ? toRubles(this.existing.saved) : 0) as number | null,
     deadline: this.existing?.deadline ?? todayIso(),
     scope: (this.existing?.scope ?? this.store.scope()) as BudgetScope,
@@ -39,24 +40,30 @@ export class GoalForm {
     this.model,
     (path) => {
       required(path.name, { message: 'Введите название' });
-      required(path.target, { message: 'Введите целевую сумму' });
-      min(path.target, 0.01, { message: 'Сумма должна быть больше нуля' });
-      max(path.target, MAX_AMOUNT, { message: 'Слишком большая сумма' });
       required(path.saved, { message: 'Введите накопленную сумму (можно 0)' });
       min(path.saved, 0, { message: 'Не меньше нуля' });
       max(path.saved, MAX_AMOUNT, { message: 'Слишком большая сумма' });
-      required(path.deadline, { message: 'Выберите срок' });
+      applyWhen(
+        path,
+        ({ valueOf }) => valueOf(path.withTarget),
+        (goal) => {
+          required(goal.target, { message: 'Введите целевую сумму' });
+          min(goal.target, 0.01, { message: 'Сумма должна быть больше нуля' });
+          max(goal.target, MAX_AMOUNT, { message: 'Слишком большая сумма' });
+          required(goal.deadline, { message: 'Выберите срок' });
+        },
+      );
     },
     {
       submission: {
         action: async () => {
           const value = this.model();
-          if (value.target === null || value.saved === null) return;
+          if (value.saved === null || (value.withTarget && value.target === null)) return;
           const draft = {
             name: value.name.trim(),
-            target: toKopecks(value.target),
+            target: value.withTarget && value.target !== null ? toKopecks(value.target) : null,
             saved: toKopecks(value.saved),
-            deadline: value.deadline,
+            deadline: value.withTarget ? value.deadline : null,
             scope: value.scope,
           };
           await firstValueFrom(
