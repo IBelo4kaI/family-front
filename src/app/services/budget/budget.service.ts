@@ -3,6 +3,7 @@ import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { API_URL } from '@/constants/api.constants';
 import {
+  BudgetData,
   CategoryLimit,
   CreditCard,
   NewCategoryLimit,
@@ -17,14 +18,13 @@ import {
   SettleResult,
   Transaction,
 } from '@/models/budget.model';
-import { BudgetApi, BudgetData } from '@/services/budget.api';
 
 const BASE = `${API_URL}/budget`;
 const toVoid = map(() => undefined);
 const group = (ref: PaymentRef) => (ref.kind === 'card' ? 'cards' : 'payments');
 
 @Service()
-export class HttpBudgetApi extends BudgetApi {
+export class BudgetService {
   private readonly http = inject(HttpClient);
 
   load(): Observable<BudgetData> {

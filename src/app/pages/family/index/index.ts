@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { PageHeader } from '@/components/Layout/page-header';
 import { Invite } from '@/models/family.model';
-import { AuthService } from '@/services/auth.service';
-import { FamilyService } from '@/services/family.service';
+import { AuthService } from '@/services/auth/auth.service';
+import { FamilyService } from '@/services/family/family.service';
 import { errorMessage } from '@/utils/http-error';
 
 @Component({

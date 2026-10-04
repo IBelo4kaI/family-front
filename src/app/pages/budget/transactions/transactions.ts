@@ -6,7 +6,7 @@ import { MoneyPipe } from '@/pipes/money';
 import { ShortDatePipe } from '@/pipes/short-date';
 import { TransactionView } from '@/models/budget.model';
 import { StoredReceiptItem } from '@/models/receipt.model';
-import { ReceiptService } from '@/services/receipt.service';
+import { ReceiptService } from '@/services/receipt/receipt.service';
 import { BudgetStore } from '@/stores/budget.store';
 import { errorMessage } from '@/utils/http-error';
 import { PERSONAL_MODE_ENABLED } from '@/constants/budget.constants';

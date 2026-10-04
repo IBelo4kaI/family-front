@@ -3,7 +3,7 @@ import { PageHeader } from '@/components/Layout/page-header';
 import { FormField, FormRoot, email, form, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from '@/services/auth.service';
+import { AuthService } from '@/services/auth/auth.service';
 import { errorMessage } from '@/utils/http-error';
 
 @Component({

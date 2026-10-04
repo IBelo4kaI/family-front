@@ -2,7 +2,7 @@ import { Service, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, tap } from 'rxjs';
 import { errorMessage } from '@/utils/http-error';
 import { PERSONAL_MODE_ENABLED } from '@/constants/budget.constants';
-import { FamilyService } from '@/services/family.service';
+import { FamilyService } from '@/services/family/family.service';
 import {
   BudgetScope,
   Category,
@@ -27,7 +27,7 @@ import {
   YearMonth,
 } from '@/models/budget.model';
 import { daysInMonth, monthKey, parseIso, toIso, todayIso } from '@/utils/iso-date';
-import { BudgetApi } from '@/services/budget.api';
+import { BudgetService } from '@/services/budget/budget.service';
 
 const RECENT_COUNT = 5;
 
@@ -47,7 +47,7 @@ export class BudgetStore {
   readonly scope = signal<BudgetScope>(PERSONAL_MODE_ENABLED ? 'personal' : 'family');
   readonly month = signal<YearMonth>(this.currentMonth());
 
-  private readonly api = inject(BudgetApi);
+  private readonly api = inject(BudgetService);
   private readonly family = inject(FamilyService);
 
   readonly categories = signal<Category[]>([]);

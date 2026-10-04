@@ -135,3 +135,12 @@ export interface PaymentView {
   pending: boolean;
   closed: boolean;
 }
+
+export interface BudgetData {
+  categories: Category[];
+  transactions: Transaction[];
+  payments: RecurringPayment[];
+  cards: CreditCard[];
+  limits: CategoryLimit[];
+  goals: SavingsGoal[];
+}

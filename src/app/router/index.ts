@@ -2,8 +2,8 @@ import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { MainLayout } from '@/layouts/main-layout';
-import { authGuard, guestGuard } from '@/services/auth.guard';
-import { FamilyService } from '@/services/family.service';
+import { authGuard, guestGuard } from '@/services/auth/auth.guard';
+import { FamilyService } from '@/services/family/family.service';
 
 const underDevelopment = () =>
   import('@/components/under-development').then((m) => m.UnderDevelopment);

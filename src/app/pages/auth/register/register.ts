@@ -4,7 +4,7 @@ import { FormField, FormRoot, email, form, minLength, required } from '@angular/
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ColorPicker } from '@/components/color-picker';
-import { AuthService } from '@/services/auth.service';
+import { AuthService } from '@/services/auth/auth.service';
 import { errorMessage } from '@/utils/http-error';
 
 const MIN_PASSWORD = 8;

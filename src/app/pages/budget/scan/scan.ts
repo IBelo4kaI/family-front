@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import QrScanner from 'qr-scanner';
 import { firstValueFrom } from 'rxjs';
 import { PageHeader } from '@/components/Layout/page-header';
-import { ReceiptService } from '@/services/receipt.service';
+import { ReceiptService } from '@/services/receipt/receipt.service';
 import { errorMessage } from '@/utils/http-error';
 
 // Строка из QR чека: t=...&s=...&fn=...&i=...&fp=...&n=...

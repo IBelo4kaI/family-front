@@ -3,7 +3,7 @@ import { Service, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { API_URL } from '@/constants/api.constants';
 import { Family, FamilyMember, Invite } from '@/models/family.model';
-import { AuthService } from '@/services/auth.service';
+import { AuthService } from '@/services/auth/auth.service';
 
 @Service()
 export class FamilyService {
