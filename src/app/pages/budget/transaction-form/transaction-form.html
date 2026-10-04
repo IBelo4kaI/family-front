@@ -1,0 +1,84 @@
+<app-page-header
+  [title]="isEdit ? 'Редактирование транзакции' : 'Новая транзакция'"
+  [backLink]="isEdit ? '/budget/transactions' : '/budget'"
+  [backLabel]="isEdit ? 'Назад к транзакциям' : 'Назад к бюджету'"
+/>
+
+<form [formRoot]="transactionForm">
+  <fieldset>
+    <legend>Тип</legend>
+    <div class="segmented">
+      <label>
+        <input type="radio" value="expense" [formField]="transactionForm.type" (change)="resetCategory()" />
+        <span>Расход</span>
+      </label>
+      <label>
+        <input type="radio" value="income" [formField]="transactionForm.type" (change)="resetCategory()" />
+        <span>Доход</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="amount">Сумма, ₽</label>
+    <input
+      id="amount"
+      type="number"
+      inputmode="decimal"
+      step="0.01"
+      [formField]="transactionForm.amount"
+      [attr.aria-describedby]="transactionForm.amount().touched() && transactionForm.amount().invalid() ? 'amount-error' : null"
+    />
+    @if (transactionForm.amount().touched() && transactionForm.amount().invalid()) {
+      <p class="error" id="amount-error" role="alert">{{ transactionForm.amount().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="date">Дата</label>
+    <input
+      id="date"
+      type="date"
+      [formField]="transactionForm.date"
+      [attr.aria-describedby]="transactionForm.date().touched() && transactionForm.date().invalid() ? 'date-error' : null"
+    />
+    @if (transactionForm.date().touched() && transactionForm.date().invalid()) {
+      <p class="error" id="date-error" role="alert">{{ transactionForm.date().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="category">Категория</label>
+    <select
+      id="category"
+      [formField]="transactionForm.categoryId"
+      [attr.aria-describedby]="transactionForm.categoryId().touched() && transactionForm.categoryId().invalid() ? 'category-error' : null"
+    >
+      <option value="" disabled>Выберите категорию</option>
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+    @if (transactionForm.categoryId().touched() && transactionForm.categoryId().invalid()) {
+      <p class="error" id="category-error" role="alert">{{ transactionForm.categoryId().errors()[0].message }}</p>
+    }
+  </div>
+
+  @if (personalEnabled) {
+    <fieldset>
+      <legend>Чьи средства</legend>
+      <div class="segmented">
+        <label>
+          <input type="radio" value="personal" [formField]="transactionForm.scope" />
+          <span>Личные</span>
+        </label>
+        <label>
+          <input type="radio" value="family" [formField]="transactionForm.scope" />
+          <span>Семейные</span>
+        </label>
+      </div>
+    </fieldset>
+  }
+
+  <button type="submit" class="submit">Сохранить</button>
+</form>

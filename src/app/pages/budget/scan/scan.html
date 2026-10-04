@@ -1,0 +1,34 @@
+<app-page-header title="Сканирование чека" backLink="/budget" backLabel="Назад к бюджету" />
+
+<div class="viewfinder" [hidden]="!cameraAvailable()">
+  <video #video muted playsinline></video>
+</div>
+
+@if (loading()) {
+  <p class="status" role="status">Получаем данные чека…</p>
+}
+
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+
+<section class="card" aria-labelledby="alt-title">
+  <h2 id="alt-title">Другие способы</h2>
+
+  <label class="file">
+    <input type="file" accept="image/*" capture="environment" (change)="onFile($event)" />
+    <span>Сфотографировать или выбрать фото с QR</span>
+  </label>
+
+  <label for="manual">Данные из QR вручную</label>
+  <textarea
+    id="manual"
+    rows="3"
+    placeholder="t=20250101T1200&s=100.00&fn=...&i=...&fp=...&n=1"
+    [value]="manual()"
+    (input)="onManualInput($event)"
+  ></textarea>
+  <button type="button" class="submit" [disabled]="loading() || !manual().trim()" (click)="submitManual()">
+    Проверить чек
+  </button>
+</section>

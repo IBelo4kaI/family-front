@@ -1,0 +1,23 @@
+<app-page-header title="Платежи" backLink="/budget" backLabel="Назад к бюджету">
+  <app-scope-switch [(scope)]="store.scope" />
+</app-page-header>
+
+<app-payment-list
+  class="card"
+  title="Регулярные платежи"
+  emptyText="Подписок и кредитов нет"
+  addLink="add"
+  [items]="store.paymentItems()"
+  (settle)="settle($event)"
+  (close)="close($event)"
+/>
+
+<app-payment-list
+  class="card"
+  title="Кредитные карты"
+  emptyText="Карт нет"
+  addLink="add-card"
+  [items]="store.cardItems()"
+  (settle)="settle($event)"
+  (close)="close($event)"
+/>

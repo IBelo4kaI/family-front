@@ -1,0 +1,41 @@
+<app-page-header title="Вход" />
+
+<form [formRoot]="loginForm">
+  <div class="field">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      [formField]="loginForm.email"
+      [attr.aria-describedby]="loginForm.email().touched() && loginForm.email().invalid() ? 'email-error' : null"
+    />
+    @if (loginForm.email().touched() && loginForm.email().invalid()) {
+      <p class="error" id="email-error" role="alert">{{ loginForm.email().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="password">Пароль</label>
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      [formField]="loginForm.password"
+      [attr.aria-describedby]="loginForm.password().touched() && loginForm.password().invalid() ? 'password-error' : null"
+    />
+    @if (loginForm.password().touched() && loginForm.password().invalid()) {
+      <p class="error" id="password-error" role="alert">{{ loginForm.password().errors()[0].message }}</p>
+    }
+  </div>
+
+  @if (submitError()) {
+    <p class="error" role="alert">{{ submitError() }}</p>
+  }
+
+  <button type="submit" class="submit">Войти</button>
+</form>
+
+<p class="switch">
+  <a routerLink="/register">Создать семью</a> · <a routerLink="/join">Есть код приглашения</a>
+</p>

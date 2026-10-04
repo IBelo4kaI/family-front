@@ -1,1 +1,103 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --clr-accent: 210 90% 42%;
+  --clr-accent-muted: 210 90% 90%;
+  --clr-success: 100 90% 50%;
+  --clr-success-muted: 100 90% 90%;
+  --clr-warn: 30 90% 50%;
+  --clr-warn-muted: 30 90% 90%;
+  --clr-danger: 15 90% 50%;
+  --clr-danger-muted: 15 90% 90%;
+  --clr-danger-text: 15 90% 30%;
+  --clr-success-text: 100 90% 22%;
+
+  --clr-border: 40 60% 85%;
+
+  --clr-back: 40 40% 95%;
+  --clr-surface: 0 0% 100%;
+  --clr-on-accent: 0 0% 100%;
+
+  --clr-text: 0 0% 12%;
+  --clr-text-muted: var(--clr-text) / 0.7;
+
+  --fz-title: 1.2rem;
+  --fz-base: 1rem;
+  --fz-caption: 0.8rem;
+
+  --br-round: 50%;
+  --br-base: 12px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a,
+a:hover,
+a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  color: inherit;
+  background: inherit;
+  border: none;
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--clr-accent));
+  outline-offset: 2px;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  color: hsl(var(--clr-text));
+  background: hsl(var(--clr-back));
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+}
+
+.card {
+  display: block;
+  padding: 1rem;
+  background: hsl(var(--clr-surface));
+  border: 1px solid hsl(var(--clr-border));
+  border-radius: var(--br-base);
+}
+
+progress {
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  overflow: hidden;
+  background: hsl(var(--clr-accent-muted));
+  color: hsl(var(--clr-accent));
+}
+
+progress::-webkit-progress-bar {
+  background: hsl(var(--clr-accent-muted));
+}
+
+progress::-webkit-progress-value {
+  background: currentColor;
+}
+
+progress::-moz-progress-bar {
+  background: currentColor;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

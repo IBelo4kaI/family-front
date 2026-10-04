@@ -1,0 +1,110 @@
+<app-page-header [title]="isEdit ? 'Редактирование карты' : 'Новая карта'" backLink="/budget/payments" backLabel="Назад к платежам" />
+
+<form [formRoot]="cardForm">
+  <div class="field">
+    <label for="bank">Название или банк</label>
+    <input
+      id="bank"
+      type="text"
+      autocomplete="off"
+      [formField]="cardForm.bank"
+      [attr.aria-describedby]="cardForm.bank().touched() && cardForm.bank().invalid() ? 'bank-error' : null"
+    />
+    @if (cardForm.bank().touched() && cardForm.bank().invalid()) {
+      <p class="error" id="bank-error" role="alert">{{ cardForm.bank().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="amount-due">Сумма к оплате, ₽</label>
+    <input
+      id="amount-due"
+      type="number"
+      inputmode="decimal"
+      step="0.01"
+      [formField]="cardForm.amountDue"
+      [attr.aria-describedby]="cardForm.amountDue().touched() && cardForm.amountDue().invalid() ? 'amount-due-error' : null"
+    />
+    @if (cardForm.amountDue().touched() && cardForm.amountDue().invalid()) {
+      <p class="error" id="amount-due-error" role="alert">{{ cardForm.amountDue().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="due-date">Дата платежа</label>
+    <input
+      id="due-date"
+      type="date"
+      [formField]="cardForm.dueDate"
+      [attr.aria-describedby]="cardForm.dueDate().touched() && cardForm.dueDate().invalid() ? 'due-date-error' : null"
+    />
+    @if (cardForm.dueDate().touched() && cardForm.dueDate().invalid()) {
+      <p class="error" id="due-date-error" role="alert">{{ cardForm.dueDate().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="category">Категория расхода</label>
+    <select
+      id="category"
+      [formField]="cardForm.categoryId"
+      [attr.aria-describedby]="cardForm.categoryId().touched() && cardForm.categoryId().invalid() ? 'category-error' : null"
+    >
+      <option value="" disabled>Выберите категорию</option>
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+    @if (cardForm.categoryId().touched() && cardForm.categoryId().invalid()) {
+      <p class="error" id="category-error" role="alert">{{ cardForm.categoryId().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="notify">Напомнить за, дней</label>
+    <input
+      id="notify"
+      type="number"
+      inputmode="numeric"
+      step="1"
+      [formField]="cardForm.notifyDaysBefore"
+      [attr.aria-describedby]="cardForm.notifyDaysBefore().touched() && cardForm.notifyDaysBefore().invalid() ? 'notify-error' : null"
+    />
+    @if (cardForm.notifyDaysBefore().touched() && cardForm.notifyDaysBefore().invalid()) {
+      <p class="error" id="notify-error" role="alert">{{ cardForm.notifyDaysBefore().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="limit">Кредитный лимит, ₽ (необязательно)</label>
+    <input
+      id="limit"
+      type="number"
+      inputmode="decimal"
+      step="0.01"
+      [formField]="cardForm.creditLimit"
+      [attr.aria-describedby]="cardForm.creditLimit().touched() && cardForm.creditLimit().invalid() ? 'limit-error' : null"
+    />
+    @if (cardForm.creditLimit().touched() && cardForm.creditLimit().invalid()) {
+      <p class="error" id="limit-error" role="alert">{{ cardForm.creditLimit().errors()[0].message }}</p>
+    }
+  </div>
+
+  @if (personalEnabled) {
+    <fieldset>
+      <legend>Чьи средства</legend>
+      <div class="segmented">
+        <label>
+          <input type="radio" value="personal" [formField]="cardForm.scope" />
+          <span>Личные</span>
+        </label>
+        <label>
+          <input type="radio" value="family" [formField]="cardForm.scope" />
+          <span>Семейные</span>
+        </label>
+      </div>
+    </fieldset>
+  }
+
+  <button type="submit" class="submit">Сохранить</button>
+</form>

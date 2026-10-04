@@ -1,0 +1,19 @@
+# DOMAIN=example.com — HTTPS с автоматическим сертификатом; DOMAIN=:80 — только HTTP
+{$DOMAIN} {
+	encode gzip
+
+	handle /v1/* {
+		reverse_proxy backend:8080
+	}
+
+	handle {
+		root * /srv
+
+		# service worker не должен кешироваться
+		@sw path /ngsw-worker.js /ngsw.json
+		header @sw Cache-Control "no-cache"
+
+		try_files {path} /index.html
+		file_server
+	}
+}

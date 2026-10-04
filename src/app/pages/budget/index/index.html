@@ -1,0 +1,31 @@
+<app-page-header title="Бюджет">
+  <a class="family-link" routerLink="/family" aria-label="Семья">
+    <i class="fi fi-rr-users" aria-hidden="true"></i>
+  </a>
+  <app-scope-switch [(scope)]="store.scope" />
+</app-page-header>
+
+@if (personalEnabled) {
+  <p class="sr-only" aria-live="polite">{{ store.scope() === 'family' ? 'Семейный режим' : 'Личный режим' }}</p>
+}
+
+@if (store.loadError(); as error) {
+  <div class="card load-error" role="alert">
+    <p>{{ error }}</p>
+    <button type="button" (click)="store.load().subscribe()">Повторить</button>
+  </div>
+}
+
+<app-month-picker [label]="store.monthLabel()" (shift)="store.shiftMonth($event)" />
+
+<app-balance-card [balance]="store.balance()" [income]="store.income()" [expense]="store.expense()" />
+
+<div class="actions">
+  <a routerLink="scan">Сканировать чек</a>
+  <a routerLink="add">Добавить транзакцию</a>
+</div>
+
+<app-upcoming-payments [items]="store.upcoming()" [total]="store.upcomingTotal()" />
+<app-category-breakdown class="card" [items]="store.categorySpend()" />
+<app-limits-goals class="card" [limits]="store.limits()" [goals]="store.goals()" />
+<app-recent-transactions class="card" [items]="store.recent()" [showAuthor]="store.scope() === 'family'" />

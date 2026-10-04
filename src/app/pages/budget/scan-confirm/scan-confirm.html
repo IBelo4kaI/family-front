@@ -1,0 +1,59 @@
+<app-page-header title="Чек" backLink="/budget/scan" backLabel="Назад к сканированию" />
+
+@if (receipt(); as r) {
+  <section class="card" aria-labelledby="receipt-title">
+    <h2 id="receipt-title">{{ r.sellerName || 'Продавец не указан' }}</h2>
+    <p class="meta">{{ r.date | shortDate }}{{ r.sellerInn ? ' · ИНН ' + r.sellerInn : '' }}</p>
+    <p class="total">{{ r.totalSum | money }}</p>
+
+    <ul>
+      @for (item of r.items; track $index) {
+        <li>
+          <span>{{ item.name }}</span>
+          <span class="sum">{{ item.quantity }} × {{ item.price | money }} = {{ item.sum | money }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <form [formRoot]="confirmForm">
+    <div class="field">
+      <label for="category">Категория расхода</label>
+      <select
+        id="category"
+        [formField]="confirmForm.categoryId"
+        [attr.aria-describedby]="confirmForm.categoryId().touched() && confirmForm.categoryId().invalid() ? 'category-error' : null"
+      >
+        <option value="" disabled>Выберите категорию</option>
+        @for (category of categories(); track category.id) {
+          <option [value]="category.id">{{ category.name }}</option>
+        }
+      </select>
+      @if (confirmForm.categoryId().touched() && confirmForm.categoryId().invalid()) {
+        <p class="error" id="category-error" role="alert">{{ confirmForm.categoryId().errors()[0].message }}</p>
+      }
+    </div>
+
+    @if (personalEnabled) {
+      <fieldset>
+        <legend>Чьи средства</legend>
+        <div class="segmented">
+          <label>
+            <input type="radio" value="personal" [formField]="confirmForm.scope" />
+            <span>Личные</span>
+          </label>
+          <label>
+            <input type="radio" value="family" [formField]="confirmForm.scope" />
+            <span>Семейные</span>
+          </label>
+        </div>
+      </fieldset>
+    }
+
+    @if (submitError()) {
+      <p class="error" role="alert">{{ submitError() }}</p>
+    }
+
+    <button type="submit" class="submit">Сохранить расход</button>
+  </form>
+}

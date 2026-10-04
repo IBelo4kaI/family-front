@@ -1,0 +1,145 @@
+<app-page-header [title]="isEdit ? 'Редактирование платежа' : 'Новый платёж'" backLink="/budget/payments" backLabel="Назад к платежам" />
+
+<form [formRoot]="paymentForm">
+  <fieldset>
+    <legend>Тип</legend>
+    <div class="segmented">
+      <label>
+        <input type="radio" value="subscription" [formField]="paymentForm.kind" />
+        <span>Подписка</span>
+      </label>
+      <label>
+        <input type="radio" value="loan" [formField]="paymentForm.kind" />
+        <span>Кредит</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="name">Название</label>
+    <input
+      id="name"
+      type="text"
+      autocomplete="off"
+      [formField]="paymentForm.name"
+      [attr.aria-describedby]="paymentForm.name().touched() && paymentForm.name().invalid() ? 'name-error' : null"
+    />
+    @if (paymentForm.name().touched() && paymentForm.name().invalid()) {
+      <p class="error" id="name-error" role="alert">{{ paymentForm.name().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="amount">{{ model().kind === 'loan' ? 'Ежемесячный платёж, ₽' : 'Сумма списания, ₽' }}</label>
+    <input
+      id="amount"
+      type="number"
+      inputmode="decimal"
+      step="0.01"
+      [formField]="paymentForm.amount"
+      [attr.aria-describedby]="paymentForm.amount().touched() && paymentForm.amount().invalid() ? 'amount-error' : null"
+    />
+    @if (paymentForm.amount().touched() && paymentForm.amount().invalid()) {
+      <p class="error" id="amount-error" role="alert">{{ paymentForm.amount().errors()[0].message }}</p>
+    }
+  </div>
+
+  <fieldset>
+    <legend>Периодичность</legend>
+    <div class="segmented">
+      <label>
+        <input type="radio" value="month" [formField]="paymentForm.period" />
+        <span>Месяц</span>
+      </label>
+      <label>
+        <input type="radio" value="year" [formField]="paymentForm.period" />
+        <span>Год</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="next-date">Дата следующего платежа</label>
+    <input
+      id="next-date"
+      type="date"
+      [formField]="paymentForm.nextDate"
+      [attr.aria-describedby]="paymentForm.nextDate().touched() && paymentForm.nextDate().invalid() ? 'next-date-error' : null"
+    />
+    @if (paymentForm.nextDate().touched() && paymentForm.nextDate().invalid()) {
+      <p class="error" id="next-date-error" role="alert">{{ paymentForm.nextDate().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="category">Категория расхода</label>
+    <select
+      id="category"
+      [formField]="paymentForm.categoryId"
+      [attr.aria-describedby]="paymentForm.categoryId().touched() && paymentForm.categoryId().invalid() ? 'category-error' : null"
+    >
+      <option value="" disabled>Выберите категорию</option>
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+    @if (paymentForm.categoryId().touched() && paymentForm.categoryId().invalid()) {
+      <p class="error" id="category-error" role="alert">{{ paymentForm.categoryId().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="notify">Напомнить за, дней</label>
+    <input
+      id="notify"
+      type="number"
+      inputmode="numeric"
+      step="1"
+      [formField]="paymentForm.notifyDaysBefore"
+      [attr.aria-describedby]="paymentForm.notifyDaysBefore().touched() && paymentForm.notifyDaysBefore().invalid() ? 'notify-error' : null"
+    />
+    @if (paymentForm.notifyDaysBefore().touched() && paymentForm.notifyDaysBefore().invalid()) {
+      <p class="error" id="notify-error" role="alert">{{ paymentForm.notifyDaysBefore().errors()[0].message }}</p>
+    }
+  </div>
+
+  @if (model().kind === 'loan') {
+    <div class="field">
+      <label for="total">Общая сумма кредита, ₽ (необязательно)</label>
+      <input
+        id="total"
+        type="number"
+        inputmode="decimal"
+        step="0.01"
+        [formField]="paymentForm.totalAmount"
+        [attr.aria-describedby]="paymentForm.totalAmount().touched() && paymentForm.totalAmount().invalid() ? 'total-error' : null"
+      />
+      @if (paymentForm.totalAmount().touched() && paymentForm.totalAmount().invalid()) {
+        <p class="error" id="total-error" role="alert">{{ paymentForm.totalAmount().errors()[0].message }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="end-date">Дата окончания (необязательно)</label>
+      <input id="end-date" type="date" [formField]="paymentForm.endDate" />
+    </div>
+  }
+
+  @if (personalEnabled) {
+    <fieldset>
+      <legend>Чьи средства</legend>
+      <div class="segmented">
+        <label>
+          <input type="radio" value="personal" [formField]="paymentForm.scope" />
+          <span>Личные</span>
+        </label>
+        <label>
+          <input type="radio" value="family" [formField]="paymentForm.scope" />
+          <span>Семейные</span>
+        </label>
+      </div>
+    </fieldset>
+  }
+
+  <button type="submit" class="submit">Сохранить</button>
+</form>

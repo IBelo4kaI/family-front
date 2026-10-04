@@ -1,0 +1,33 @@
+h2 {
+  font-size: var(--fz-title);
+}
+
+.meta {
+  font-size: var(--fz-caption);
+  color: hsl(var(--clr-text-muted));
+}
+
+.total {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+li:not(:last-child) {
+  border-bottom: 1px solid hsl(var(--clr-border));
+}
+
+.sum {
+  font-size: var(--fz-caption);
+  color: hsl(var(--clr-text-muted));
+}

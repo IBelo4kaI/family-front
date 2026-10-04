@@ -1,0 +1,100 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  padding: 0.6rem 0;
+}
+
+li:not(:last-child) {
+  border-bottom: 1px solid hsl(var(--clr-border));
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.meta {
+  font-size: var(--fz-caption);
+  color: hsl(var(--clr-text-muted));
+}
+
+.dot {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: var(--br-round);
+}
+
+.amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.income {
+  color: hsl(var(--clr-success-text));
+}
+
+.links {
+  display: flex;
+  gap: 1rem;
+}
+
+.links a,
+.links button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: inherit;
+  font-size: var(--fz-caption);
+  text-decoration: underline;
+}
+
+.links a {
+  color: hsl(var(--clr-accent));
+}
+
+.links button {
+  color: hsl(var(--clr-text-muted));
+}
+
+.items {
+  margin: 0.25rem 0 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid hsl(var(--clr-border));
+}
+
+.items li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+  border: none;
+}
+
+.error {
+  color: hsl(var(--clr-danger-text));
+}
+
+.add {
+  align-self: flex-start;
+  padding: 0.6rem 0;
+  color: hsl(var(--clr-accent));
+  font-weight: 600;
+}
+
+.empty {
+  color: hsl(var(--clr-text-muted));
+}

@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: family
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?задайте POSTGRES_PASSWORD в deploy/.env}
+      POSTGRES_DB: family
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U family -d family"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: ../../family-back
+      dockerfile: ../family-front/deploy/backend.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ADDR: 0.0.0.0:8080
+      DB_STRING: postgres://family:${POSTGRES_PASSWORD}@db:5432/family?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET:?задайте JWT_SECRET в deploy/.env}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      PROVERKACHEKA_TOKENS: ${PROVERKACHEKA_TOKENS:-}
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/web.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      DOMAIN: ${DOMAIN:?задайте DOMAIN в deploy/.env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  db-data:
+  caddy-data:
+  caddy-config:

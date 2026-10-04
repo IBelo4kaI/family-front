@@ -1,0 +1,51 @@
+<app-page-header title="Транзакции" backLink="/budget" backLabel="Назад к бюджету" />
+
+<app-month-picker [label]="store.monthLabel()" (shift)="store.shiftMonth($event)" />
+
+<section class="card" aria-label="Транзакции за месяц">
+  <ul>
+    @for (item of store.transactionItems(); track item.id) {
+      <li>
+        <div class="row">
+          <div>
+            <div class="title">{{ item.categoryName }}</div>
+            <div class="meta">
+              {{ item.date | shortDate }} ·
+              <span class="dot" aria-hidden="true" [style.background]="'hsl(' + item.authorColor + ')'"></span>
+              {{ item.authorName }}
+            </div>
+          </div>
+          <span class="amount" [class.income]="item.type === 'income'">
+            {{ item.type === 'income' ? '+' : '−' }}{{ item.amount | money }}
+          </span>
+        </div>
+        <div class="links">
+          <a [routerLink]="[item.id, 'edit']">Изменить</a>
+          @if (item.source === 'receipt') {
+            <button type="button" [attr.aria-expanded]="openId() === item.id" (click)="toggleItems(item)">
+              Позиции чека
+            </button>
+          }
+          <button type="button" (click)="remove(item)">Удалить</button>
+        </div>
+        @if (openId() === item.id) {
+          <ul class="items">
+            @for (position of receiptItems(); track position.id) {
+              <li>
+                <span>{{ position.name }}</span>
+                <span class="meta">{{ position.quantity }} × {{ position.price | money }} = {{ position.sum | money }}</span>
+              </li>
+            }
+            @if (itemsError()) {
+              <li class="error" role="alert">{{ itemsError() }}</li>
+            }
+          </ul>
+        }
+      </li>
+    } @empty {
+      <li class="empty">Транзакций за месяц нет</li>
+    }
+  </ul>
+</section>
+
+<a class="add" routerLink="/budget/add">Добавить транзакцию</a>

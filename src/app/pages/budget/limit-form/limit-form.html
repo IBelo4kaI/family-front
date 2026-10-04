@@ -1,0 +1,58 @@
+<app-page-header [title]="isEdit ? 'Редактирование лимита' : 'Новый лимит'" backLink="/budget/planning" backLabel="Назад к лимитам и целям" />
+
+<form [formRoot]="limitForm">
+  <div class="field">
+    <label for="category">Категория</label>
+    <select
+      id="category"
+      [formField]="limitForm.categoryId"
+      [attr.aria-describedby]="limitForm.categoryId().touched() && limitForm.categoryId().invalid() ? 'category-error' : null"
+      (change)="duplicateError.set(false)"
+    >
+      <option value="" disabled>Выберите категорию</option>
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+    @if (limitForm.categoryId().touched() && limitForm.categoryId().invalid()) {
+      <p class="error" id="category-error" role="alert">{{ limitForm.categoryId().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="amount">Лимит на месяц, ₽</label>
+    <input
+      id="amount"
+      type="number"
+      inputmode="decimal"
+      step="0.01"
+      [formField]="limitForm.amount"
+      [attr.aria-describedby]="limitForm.amount().touched() && limitForm.amount().invalid() ? 'amount-error' : null"
+    />
+    @if (limitForm.amount().touched() && limitForm.amount().invalid()) {
+      <p class="error" id="amount-error" role="alert">{{ limitForm.amount().errors()[0].message }}</p>
+    }
+  </div>
+
+  @if (personalEnabled) {
+    <fieldset>
+      <legend>Чьи средства</legend>
+      <div class="segmented">
+        <label>
+          <input type="radio" value="personal" [formField]="limitForm.scope" (change)="duplicateError.set(false)" />
+          <span>Личные</span>
+        </label>
+        <label>
+          <input type="radio" value="family" [formField]="limitForm.scope" (change)="duplicateError.set(false)" />
+          <span>Семейные</span>
+        </label>
+      </div>
+    </fieldset>
+  }
+
+  @if (duplicateError()) {
+    <p class="error" role="alert">На эту категорию в выбранном режиме лимит уже задан</p>
+  }
+
+  <button type="submit" class="submit">Сохранить</button>
+</form>

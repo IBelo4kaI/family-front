@@ -1,0 +1,24 @@
+<app-page-header title="Пополнение цели" backLink="/budget/planning" backLabel="Назад к лимитам и целям" />
+
+@if (goal) {
+  <p>{{ goal.name }}: {{ goal.saved | money }} из {{ goal.target | money }}</p>
+}
+
+<form [formRoot]="topUpForm">
+  <div class="field">
+    <label for="amount">Сумма пополнения, ₽</label>
+    <input
+      id="amount"
+      type="number"
+      inputmode="decimal"
+      step="0.01"
+      [formField]="topUpForm.amount"
+      [attr.aria-describedby]="topUpForm.amount().touched() && topUpForm.amount().invalid() ? 'amount-error' : null"
+    />
+    @if (topUpForm.amount().touched() && topUpForm.amount().invalid()) {
+      <p class="error" id="amount-error" role="alert">{{ topUpForm.amount().errors()[0].message }}</p>
+    }
+  </div>
+
+  <button type="submit" class="submit">Пополнить</button>
+</form>

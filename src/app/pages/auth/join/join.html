@@ -1,0 +1,74 @@
+<app-page-header title="Вступить в семью" />
+
+<form [formRoot]="joinForm">
+  <div class="field">
+    <label for="code">Код приглашения</label>
+    <input
+      id="code"
+      type="text"
+      autocomplete="off"
+      [formField]="joinForm.code"
+      [attr.aria-describedby]="joinForm.code().touched() && joinForm.code().invalid() ? 'code-error' : null"
+    />
+    @if (joinForm.code().touched() && joinForm.code().invalid()) {
+      <p class="error" id="code-error" role="alert">{{ joinForm.code().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="name">Ваше имя</label>
+    <input
+      id="name"
+      type="text"
+      autocomplete="name"
+      [formField]="joinForm.name"
+      [attr.aria-describedby]="joinForm.name().touched() && joinForm.name().invalid() ? 'name-error' : null"
+    />
+    @if (joinForm.name().touched() && joinForm.name().invalid()) {
+      <p class="error" id="name-error" role="alert">{{ joinForm.name().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      [formField]="joinForm.email"
+      [attr.aria-describedby]="joinForm.email().touched() && joinForm.email().invalid() ? 'email-error' : null"
+    />
+    @if (joinForm.email().touched() && joinForm.email().invalid()) {
+      <p class="error" id="email-error" role="alert">{{ joinForm.email().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="password">Пароль</label>
+    <input
+      id="password"
+      type="password"
+      autocomplete="new-password"
+      [formField]="joinForm.password"
+      [attr.aria-describedby]="joinForm.password().touched() && joinForm.password().invalid() ? 'password-error' : null"
+    />
+    @if (joinForm.password().touched() && joinForm.password().invalid()) {
+      <p class="error" id="password-error" role="alert">{{ joinForm.password().errors()[0].message }}</p>
+    }
+  </div>
+
+  <fieldset>
+    <legend>Ваш цвет</legend>
+    <app-color-picker [value]="model().color" (valueChange)="setColor($event)" />
+  </fieldset>
+
+  @if (submitError()) {
+    <p class="error" role="alert">{{ submitError() }}</p>
+  }
+
+  <button type="submit" class="submit">Вступить</button>
+</form>
+
+<p class="switch">
+  <a routerLink="/login">Уже есть аккаунт</a> · <a routerLink="/register">Создать семью</a>
+</p>

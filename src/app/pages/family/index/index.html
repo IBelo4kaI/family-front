@@ -1,0 +1,32 @@
+<app-page-header [title]="family.family()?.name ?? 'Семья'" backLink="/budget" backLabel="Назад к бюджету" />
+
+<section class="card" aria-labelledby="members-title">
+  <h2 id="members-title">Участники</h2>
+  <ul>
+    @for (member of family.members(); track member.id) {
+      <li>
+        <span class="dot" aria-hidden="true" [style.background]="'hsl(' + member.color + ')'"></span>
+        <span class="name">{{ member.name }}</span>
+        @if (member.role === 'owner') {
+          <span class="role">владелец</span>
+        }
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="card" aria-labelledby="invite-title">
+  <h2 id="invite-title">Пригласить в семью</h2>
+  @if (invite(); as current) {
+    <p class="code">{{ current.code }}</p>
+    <p class="hint">Действует до {{ current.expiresAt | date: 'dd.MM.yyyy HH:mm' }}</p>
+  }
+  @if (inviteError()) {
+    <p class="error" role="alert">{{ inviteError() }}</p>
+  }
+  <button type="button" class="action" (click)="createInvite()">
+    {{ invite() ? 'Создать новый код' : 'Создать код приглашения' }}
+  </button>
+</section>
+
+<button type="button" class="action logout" (click)="logout()">Выйти</button>

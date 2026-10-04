@@ -1,0 +1,59 @@
+<app-page-header title="Лимиты и цели" backLink="/budget" backLabel="Назад к бюджету">
+  <app-scope-switch [(scope)]="store.scope" />
+</app-page-header>
+
+<section class="card" aria-labelledby="limits-title">
+  <h2 id="limits-title">Лимиты на месяц</h2>
+  <ul>
+    @for (item of store.limits(); track item.id) {
+      <li>
+        <div class="row">
+          <span class="name">{{ item.name }}</span>
+          <span [class.over]="item.spent > item.limit">{{ item.spent | money }} / {{ item.limit | money }}</span>
+        </div>
+        <progress
+          [class.over]="item.spent > item.limit"
+          [value]="item.spent"
+          [max]="item.limit || 1"
+          [attr.aria-label]="item.name"
+          [attr.aria-valuetext]="(item.spent | money) + ' из ' + (item.limit | money)"
+        ></progress>
+        <div class="links">
+          <a [routerLink]="['limits', item.id, 'edit']">Изменить</a>
+          <button type="button" (click)="removeLimit(item)">Удалить</button>
+        </div>
+      </li>
+    } @empty {
+      <li class="empty">Лимиты не заданы</li>
+    }
+  </ul>
+  <a class="add" routerLink="limits/add">Добавить лимит</a>
+</section>
+
+<section class="card" aria-labelledby="goals-title">
+  <h2 id="goals-title">Цели накопления</h2>
+  <ul>
+    @for (goal of store.goals(); track goal.id) {
+      <li>
+        <div class="row">
+          <span class="name">{{ goal.name }} · до {{ goal.deadline | shortDate }}</span>
+          <span>{{ goal.saved | money }} / {{ goal.target | money }}</span>
+        </div>
+        <progress
+          [value]="goal.saved"
+          [max]="goal.target || 1"
+          [attr.aria-label]="goal.name"
+          [attr.aria-valuetext]="(goal.saved | money) + ' из ' + (goal.target | money)"
+        ></progress>
+        <div class="links">
+          <a [routerLink]="['goals', goal.id, 'top-up']">Пополнить</a>
+          <a [routerLink]="['goals', goal.id, 'edit']">Изменить</a>
+          <button type="button" (click)="removeGoal(goal)">Удалить</button>
+        </div>
+      </li>
+    } @empty {
+      <li class="empty">Целей пока нет</li>
+    }
+  </ul>
+  <a class="add" routerLink="goals/add">Добавить цель</a>
+</section>

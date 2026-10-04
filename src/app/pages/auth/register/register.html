@@ -1,0 +1,74 @@
+<app-page-header title="Новая семья" />
+
+<form [formRoot]="registerForm">
+  <div class="field">
+    <label for="family-name">Название семьи</label>
+    <input
+      id="family-name"
+      type="text"
+      autocomplete="off"
+      [formField]="registerForm.familyName"
+      [attr.aria-describedby]="registerForm.familyName().touched() && registerForm.familyName().invalid() ? 'family-name-error' : null"
+    />
+    @if (registerForm.familyName().touched() && registerForm.familyName().invalid()) {
+      <p class="error" id="family-name-error" role="alert">{{ registerForm.familyName().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="name">Ваше имя</label>
+    <input
+      id="name"
+      type="text"
+      autocomplete="name"
+      [formField]="registerForm.name"
+      [attr.aria-describedby]="registerForm.name().touched() && registerForm.name().invalid() ? 'name-error' : null"
+    />
+    @if (registerForm.name().touched() && registerForm.name().invalid()) {
+      <p class="error" id="name-error" role="alert">{{ registerForm.name().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      [formField]="registerForm.email"
+      [attr.aria-describedby]="registerForm.email().touched() && registerForm.email().invalid() ? 'email-error' : null"
+    />
+    @if (registerForm.email().touched() && registerForm.email().invalid()) {
+      <p class="error" id="email-error" role="alert">{{ registerForm.email().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="password">Пароль</label>
+    <input
+      id="password"
+      type="password"
+      autocomplete="new-password"
+      [formField]="registerForm.password"
+      [attr.aria-describedby]="registerForm.password().touched() && registerForm.password().invalid() ? 'password-error' : null"
+    />
+    @if (registerForm.password().touched() && registerForm.password().invalid()) {
+      <p class="error" id="password-error" role="alert">{{ registerForm.password().errors()[0].message }}</p>
+    }
+  </div>
+
+  <fieldset>
+    <legend>Ваш цвет</legend>
+    <app-color-picker [value]="model().color" (valueChange)="setColor($event)" />
+  </fieldset>
+
+  @if (submitError()) {
+    <p class="error" role="alert">{{ submitError() }}</p>
+  }
+
+  <button type="submit" class="submit">Создать семью</button>
+</form>
+
+<p class="switch">
+  <a routerLink="/login">Уже есть аккаунт</a> · <a routerLink="/join">Есть код приглашения</a>
+</p>
