@@ -44,12 +44,16 @@ export class Scan {
     const file = input.files?.[0];
     input.value = '';
     if (!file) return;
+    this.error.set('');
+    let raw: string;
     try {
-      const result = await QrScanner.scanImage(file, { returnDetailedScanResult: true });
-      await this.handle(result.data);
+      raw = (await QrScanner.scanImage(file, { returnDetailedScanResult: true })).data;
     } catch {
-      this.error.set('QR-код на фото не найден. Попробуйте снять ближе или при лучшем свете.');
+      // Локально QR не нашёлся: пусть попробует сервис
+      await this.checkOnServer(file);
+      return;
     }
+    await this.handle(raw);
   }
 
   protected async restart(): Promise<void> {
@@ -82,6 +86,20 @@ export class Scan {
     } catch {
       this.cameraAvailable.set(false);
       this.error.set('Нет доступа к камере. Загрузите фото чека или введите данные вручную.');
+    }
+  }
+
+  private async checkOnServer(file: File): Promise<void> {
+    if (this.loading()) return;
+    this.loading.set(true);
+    this.scanner?.stop();
+    try {
+      this.receipts.scanned.set(await firstValueFrom(this.receipts.checkImage(file)));
+      await this.router.navigateByUrl('/budget/scan/confirm');
+    } catch (error) {
+      this.error.set(errorMessage(error));
+      this.loading.set(false);
+      if (this.cameraAvailable()) void this.startCamera();
     }
   }
 

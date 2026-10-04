@@ -18,6 +18,13 @@ export class ReceiptService {
     return this.http.post<ScannedReceipt>(`${BASE}/check`, { qrraw });
   }
 
+  // Распознавание QR на стороне сервиса: файл уходит на бэкенд и дальше в proverkacheka
+  checkImage(file: File): Observable<ScannedReceipt> {
+    const body = new FormData();
+    body.append('file', file);
+    return this.http.post<ScannedReceipt>(`${BASE}/check-image`, body);
+  }
+
   save(request: SaveReceiptRequest): Observable<Transaction> {
     return this.http.post<Transaction>(BASE, request);
   }
