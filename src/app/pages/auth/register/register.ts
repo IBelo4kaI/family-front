@@ -13,6 +13,11 @@ const MIN_PASSWORD = 8;
   selector: 'app-register',
   imports: [PageHeader, FormField, FormRoot, RouterLink, ColorPicker],
   templateUrl: './register.html',
+  styles: `
+    :host {
+      padding: 1rem;
+    }
+  `,
   styleUrl: '../../../assets/styles/form-page.css',
 })
 export class Register {
@@ -36,7 +41,9 @@ export class Register {
       required(path.email, { message: 'Введите email' });
       email(path.email, { message: 'Некорректный email' });
       required(path.password, { message: 'Введите пароль' });
-      minLength(path.password, MIN_PASSWORD, { message: `Пароль не короче ${MIN_PASSWORD} символов` });
+      minLength(path.password, MIN_PASSWORD, {
+        message: `Пароль не короче ${MIN_PASSWORD} символов`,
+      });
     },
     {
       submission: {

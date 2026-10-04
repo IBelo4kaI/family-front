@@ -13,6 +13,11 @@ const MIN_PASSWORD = 8;
   selector: 'app-join',
   imports: [PageHeader, FormField, FormRoot, RouterLink, ColorPicker],
   templateUrl: './join.html',
+  styles: `
+    :host {
+      padding: 1rem;
+    }
+  `,
   styleUrl: '../../../assets/styles/form-page.css',
 })
 export class Join {
@@ -36,14 +41,18 @@ export class Join {
       required(path.email, { message: 'Введите email' });
       email(path.email, { message: 'Некорректный email' });
       required(path.password, { message: 'Введите пароль' });
-      minLength(path.password, MIN_PASSWORD, { message: `Пароль не короче ${MIN_PASSWORD} символов` });
+      minLength(path.password, MIN_PASSWORD, {
+        message: `Пароль не короче ${MIN_PASSWORD} символов`,
+      });
     },
     {
       submission: {
         action: async () => {
           this.submitError.set('');
           try {
-            await firstValueFrom(this.auth.join({ ...this.model(), code: this.model().code.trim() }));
+            await firstValueFrom(
+              this.auth.join({ ...this.model(), code: this.model().code.trim() }),
+            );
             await this.router.navigateByUrl('/');
           } catch (error) {
             this.submitError.set(errorMessage(error));

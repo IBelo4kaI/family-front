@@ -10,6 +10,11 @@ import { errorMessage } from '@/utils/http-error';
   selector: 'app-login',
   imports: [PageHeader, FormField, FormRoot, RouterLink],
   templateUrl: './login.html',
+  styles: `
+    :host {
+      padding: 1rem;
+    }
+  `,
   styleUrl: '../../../assets/styles/form-page.css',
 })
 export class Login {
