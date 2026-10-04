@@ -6,18 +6,23 @@ import { MoneyPipe } from '@/pipes/money';
   imports: [MoneyPipe],
   template: `
     <section class="card" aria-labelledby="balance-title">
-      <h2 id="balance-title">Остаток за месяц</h2>
-      <p class="value" [class.negative]="balance() < 0">{{ balance() | money }}</p>
-      <dl>
-        <div>
-          <dt>Доходы</dt>
-          <dd>{{ income() | money }}</dd>
-        </div>
-        <div>
-          <dt>Расходы</dt>
-          <dd>{{ expense() | money }}</dd>
-        </div>
-      </dl>
+      @if (income() > 0) {
+        <h2 id="balance-title">Остаток за месяц</h2>
+        <p class="value" [class.negative]="balance() < 0">{{ balance() | money }}</p>
+        <dl>
+          <div>
+            <dt>Доходы</dt>
+            <dd>{{ income() | money }}</dd>
+          </div>
+          <div>
+            <dt>Расходы</dt>
+            <dd>{{ expense() | money }}</dd>
+          </div>
+        </dl>
+      } @else {
+        <h2 id="balance-title">Расходы за месяц</h2>
+        <p class="value">{{ expense() | money }}</p>
+      }
     </section>
   `,
   styles: `
