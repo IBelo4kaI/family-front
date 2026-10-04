@@ -1,4 +1,5 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { CategoryField } from '@/components/category-field';
 import { PageHeader } from '@/components/Layout/page-header';
 import { FormField, FormRoot, form, max, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +15,7 @@ const MAX_NOTIFY_DAYS = 30;
 
 @Component({
   selector: 'app-card-form',
-  imports: [PageHeader, FormField, FormRoot],
+  imports: [PageHeader, CategoryField, FormField, FormRoot],
   templateUrl: './card-form.html',
   styleUrl: '../../../assets/styles/form-page.css',
 })
@@ -78,9 +79,6 @@ export class CardForm {
     },
   );
 
-  protected readonly categories = computed(() =>
-    this.store.categories().filter((c) => c.kind === 'expense'),
-  );
 
   constructor() {
     if (this.editId && !this.existing) void this.router.navigateByUrl('/budget/payments');

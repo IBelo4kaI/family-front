@@ -3,7 +3,7 @@ import { Service, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '@/constants/api.constants';
 import { Transaction } from '@/models/budget.model';
-import { SaveReceiptRequest, ScannedReceipt, StoredReceiptItem } from '@/models/receipt.model';
+import { PendingReceipt, SaveReceiptRequest, ScannedReceipt, StoredReceiptItem } from '@/models/receipt.model';
 
 const BASE = `${API_URL}/receipts`;
 
@@ -11,8 +11,23 @@ const BASE = `${API_URL}/receipts`;
 export class ReceiptService {
   private readonly http = inject(HttpClient);
 
-  // Чек, прошедший проверку, ждёт подтверждения на следующем экране
-  readonly scanned = signal<ScannedReceipt | null>(null);
+  // Проверенные чеки ждут подтверждения на следующем экране
+  readonly queue = signal<PendingReceipt[]>([]);
+
+  // false, если такой чек уже в очереди
+  enqueue(receipt: ScannedReceipt): boolean {
+    if (this.queue().some((p) => p.receipt.receiptKey === receipt.receiptKey)) return false;
+    this.queue.update((list) => [...list, { id: crypto.randomUUID(), receipt, categoryId: '', error: '' }]);
+    return true;
+  }
+
+  patch(id: string, changes: Partial<Pick<PendingReceipt, 'categoryId' | 'error'>>): void {
+    this.queue.update((list) => list.map((p) => (p.id === id ? { ...p, ...changes } : p)));
+  }
+
+  remove(id: string): void {
+    this.queue.update((list) => list.filter((p) => p.id !== id));
+  }
 
   check(qrraw: string): Observable<ScannedReceipt> {
     return this.http.post<ScannedReceipt>(`${BASE}/check`, { qrraw });

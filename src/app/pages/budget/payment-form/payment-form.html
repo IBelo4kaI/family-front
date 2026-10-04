@@ -73,16 +73,12 @@
 
   <div class="field">
     <label for="category">Категория расхода</label>
-    <select
-      id="category"
+    <app-category-field
+      inputId="category"
+      kind="expense"
       [formField]="paymentForm.categoryId"
-      [attr.aria-describedby]="paymentForm.categoryId().touched() && paymentForm.categoryId().invalid() ? 'category-error' : null"
-    >
-      <option value="" disabled>Выберите категорию</option>
-      @for (category of categories(); track category.id) {
-        <option [value]="category.id">{{ category.name }}</option>
-      }
-    </select>
+      [describedby]="paymentForm.categoryId().touched() && paymentForm.categoryId().invalid() ? 'category-error' : null"
+    />
     @if (paymentForm.categoryId().touched() && paymentForm.categoryId().invalid()) {
       <p class="error" id="category-error" role="alert">{{ paymentForm.categoryId().errors()[0].message }}</p>
     }

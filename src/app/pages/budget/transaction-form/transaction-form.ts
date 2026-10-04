@@ -1,6 +1,7 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormField, FormRoot, form, max, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CategoryField } from '@/components/category-field';
 import { PageHeader } from '@/components/Layout/page-header';
 import { firstValueFrom } from 'rxjs';
 import { todayIso } from '@/utils/iso-date';
@@ -13,7 +14,7 @@ const MAX_AMOUNT = 999_999_999.99;
 
 @Component({
   selector: 'app-transaction-form',
-  imports: [PageHeader, FormField, FormRoot],
+  imports: [PageHeader, CategoryField, FormField, FormRoot],
   templateUrl: './transaction-form.html',
   styleUrl: '../../../assets/styles/form-page.css',
 })
@@ -59,9 +60,6 @@ export class TransactionForm {
     },
   );
 
-  protected readonly categories = computed(() =>
-    this.store.categories().filter((c) => c.kind === this.model().type),
-  );
 
   constructor() {
     if (this.editId && !this.existing) void this.router.navigateByUrl('/budget/transactions');

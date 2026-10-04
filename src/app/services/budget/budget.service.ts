@@ -4,6 +4,8 @@ import { Observable, map } from 'rxjs';
 import { API_URL } from '@/constants/api.constants';
 import {
   BudgetData,
+  Category,
+  TransactionType,
   CategoryLimit,
   CreditCard,
   NewCategoryLimit,
@@ -26,6 +28,10 @@ const group = (ref: PaymentRef) => (ref.kind === 'card' ? 'cards' : 'payments');
 @Service()
 export class BudgetService {
   private readonly http = inject(HttpClient);
+
+  addCategory(name: string, kind: TransactionType): Observable<Category> {
+    return this.http.post<Category>(`${BASE}/categories`, { name, kind });
+  }
 
   load(): Observable<BudgetData> {
     return this.http.get<BudgetData>(BASE);

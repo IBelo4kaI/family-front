@@ -1,4 +1,5 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { CategoryField } from '@/components/category-field';
 import { PageHeader } from '@/components/Layout/page-header';
 import { FormField, FormRoot, form, max, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,7 +14,7 @@ const BACK_URL = '/budget/planning';
 
 @Component({
   selector: 'app-limit-form',
-  imports: [PageHeader, FormField, FormRoot],
+  imports: [PageHeader, CategoryField, FormField, FormRoot],
   templateUrl: './limit-form.html',
   styleUrl: '../../../assets/styles/form-page.css',
 })
@@ -61,9 +62,6 @@ export class LimitForm {
     },
   );
 
-  protected readonly categories = computed(() =>
-    this.store.categories().filter((c) => c.kind === 'expense'),
-  );
 
   constructor() {
     if (this.editId && !this.existing) void this.router.navigateByUrl(BACK_URL);

@@ -5,11 +5,39 @@
 </div>
 
 @if (loading()) {
-  <p class="status" role="status">Получаем данные чека…</p>
+  <p class="status" role="status">
+    @if (progress(); as p) {
+      Обрабатываем фото {{ p.current }} из {{ p.total }}…
+    } @else {
+      Получаем данные чека…
+    }
+  </p>
+}
+
+@if (notice()) {
+  <p class="status">{{ notice() }}</p>
 }
 
 @if (error()) {
   <p class="error" role="alert">{{ error() }}</p>
+}
+
+@if (failed().length) {
+  <section class="card" aria-labelledby="failed-title">
+    <h2 id="failed-title">Не удалось распознать: {{ failed().length }}</h2>
+    <ul class="failed">
+      @for (item of failed(); track $index) {
+        <li>
+          <span class="name">{{ item.name }}</span>
+          <span class="error">{{ item.message }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+}
+
+@if (queueSize()) {
+  <a class="submit queue" routerLink="confirm">Продолжить с чеками: {{ queueSize() }}</a>
 }
 
 <section class="card" aria-labelledby="alt-title">
@@ -17,7 +45,7 @@
 
   <label class="file">
     <input type="file" accept="image/*" multiple (change)="onFile($event)" />
-    <span>Сфотографировать или выбрать фото с QR</span>
+    <span>Сфотографировать или выбрать фото с QR (можно несколько)</span>
   </label>
 
   <label for="manual">Данные из QR вручную</label>

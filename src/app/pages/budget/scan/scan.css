@@ -74,6 +74,21 @@ textarea {
   resize: vertical;
 }
 
+.failed {
+  list-style: none;
+}
+
+.failed li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem 0;
+}
+
+.failed .name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
 .submit {
   width: 100%;
   min-height: 48px;
@@ -88,4 +103,10 @@ textarea {
 .submit:disabled {
   background: hsl(var(--clr-accent-muted));
   color: hsl(var(--clr-text-muted));
+}
+
+.queue {
+  display: grid;
+  place-items: center;
+  margin-top: 0;
 }

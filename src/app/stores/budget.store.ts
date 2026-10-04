@@ -22,6 +22,7 @@ import {
   SavingsGoal,
   SettleResult,
   Transaction,
+  TransactionType,
   TransactionView,
   UpcomingPayment,
   YearMonth,
@@ -245,6 +246,16 @@ export class BudgetStore {
 
   addCard(draft: NewCreditCard): Observable<CreditCard> {
     return this.api.addCard(draft).pipe(tap((created) => this.cards.update((list) => [...list, created])));
+  }
+
+  addCategory(name: string, kind: TransactionType): Observable<Category> {
+    return this.api
+      .addCategory(name, kind)
+      .pipe(
+        tap((created) =>
+          this.categories.update((list) => (list.some((c) => c.id === created.id) ? list : [...list, created])),
+        ),
+      );
   }
 
   appendTransaction(transaction: Transaction): void {

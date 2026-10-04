@@ -31,3 +31,29 @@ li:not(:last-child) {
   font-size: var(--fz-caption);
   color: hsl(var(--clr-text-muted));
 }
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.remove {
+  min-height: 44px;
+  color: hsl(var(--clr-text-muted));
+  font: inherit;
+  font-size: var(--fz-caption);
+  text-decoration: underline;
+}
+
+summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.field {
+  margin-top: 0.75rem;
+}

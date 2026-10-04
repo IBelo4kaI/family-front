@@ -14,6 +14,13 @@ export interface ScannedReceipt {
   items: ReceiptItem[];
 }
 
+export interface PendingReceipt {
+  id: string;
+  receipt: ScannedReceipt;
+  categoryId: string;
+  error: string;
+}
+
 export interface SaveReceiptRequest extends ScannedReceipt {
   categoryId: string;
   scope: 'personal' | 'family';

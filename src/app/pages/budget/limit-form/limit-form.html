@@ -3,17 +3,13 @@
 <form [formRoot]="limitForm">
   <div class="field">
     <label for="category">Категория</label>
-    <select
-      id="category"
+    <app-category-field
+      inputId="category"
+      kind="expense"
       [formField]="limitForm.categoryId"
-      [attr.aria-describedby]="limitForm.categoryId().touched() && limitForm.categoryId().invalid() ? 'category-error' : null"
-      (change)="duplicateError.set(false)"
-    >
-      <option value="" disabled>Выберите категорию</option>
-      @for (category of categories(); track category.id) {
-        <option [value]="category.id">{{ category.name }}</option>
-      }
-    </select>
+      [describedby]="limitForm.categoryId().touched() && limitForm.categoryId().invalid() ? 'category-error' : null"
+      (valueChange)="duplicateError.set(false)"
+    />
     @if (limitForm.categoryId().touched() && limitForm.categoryId().invalid()) {
       <p class="error" id="category-error" role="alert">{{ limitForm.categoryId().errors()[0].message }}</p>
     }

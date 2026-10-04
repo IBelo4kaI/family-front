@@ -1,17 +1,26 @@
-import { Component, DestroyRef, ElementRef, afterNextRender, inject, signal, viewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, DestroyRef, computed, ElementRef, afterNextRender, inject, signal, viewChild } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import QrScanner from 'qr-scanner';
 import { firstValueFrom } from 'rxjs';
 import { PageHeader } from '@/components/Layout/page-header';
 import { ReceiptService } from '@/services/receipt/receipt.service';
+import { ScannedReceipt } from '@/models/receipt.model';
 import { errorMessage } from '@/utils/http-error';
+
+const MAX_PHOTOS = 50;
+const CONFIRM_URL = '/budget/scan/confirm';
+
+interface FailedPhoto {
+  name: string;
+  message: string;
+}
 
 // Строка из QR чека: t=...&s=...&fn=...&i=...&fp=...&n=...
 const isReceiptQr = (raw: string) => /(^|&)t=/.test(raw) && /(^|&)fn=/.test(raw);
 
 @Component({
   selector: 'app-scan',
-  imports: [PageHeader],
+  imports: [PageHeader, RouterLink],
   templateUrl: './scan.html',
   styleUrl: './scan.css',
 })
@@ -25,6 +34,10 @@ export class Scan {
   protected readonly cameraAvailable = signal(true);
   protected readonly error = signal('');
   protected readonly manual = signal('');
+  protected readonly notice = signal('');
+  protected readonly failed = signal<FailedPhoto[]>([]);
+  protected readonly progress = signal<{ current: number; total: number } | null>(null);
+  protected readonly queueSize = computed(() => this.receipts.queue().length);
 
   constructor() {
     afterNextRender(() => void this.startCamera());
@@ -41,19 +54,38 @@ export class Scan {
 
   protected async onFile(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    const files = Array.from(input.files ?? []);
     input.value = '';
-    if (!file) return;
+    if (!files.length || this.loading()) return;
+
+    const selected = files.slice(0, MAX_PHOTOS);
     this.error.set('');
-    let raw: string;
-    try {
-      raw = (await QrScanner.scanImage(file, { returnDetailedScanResult: true })).data;
-    } catch {
-      // Локально QR не нашёлся: пусть попробует сервис
-      await this.checkOnServer(file);
-      return;
+    this.notice.set(
+      files.length > MAX_PHOTOS ? `Можно загрузить не больше ${MAX_PHOTOS} фото за раз, обработаны первые ${MAX_PHOTOS}.` : '',
+    );
+    this.failed.set([]);
+    this.loading.set(true);
+    this.scanner?.stop();
+
+    // По одному: внешний сервис ограничивает частоту запросов
+    const failed: FailedPhoto[] = [];
+    for (const [index, file] of selected.entries()) {
+      this.progress.set({ current: index + 1, total: selected.length });
+      try {
+        this.add(await this.recognize(file));
+      } catch (error) {
+        failed.push({ name: file.name, message: errorMessage(error) });
+      }
     }
-    await this.handle(raw);
+    this.progress.set(null);
+    this.failed.set(failed);
+    this.loading.set(false);
+
+    if (!failed.length && this.receipts.queue().length) {
+      await this.router.navigateByUrl(CONFIRM_URL);
+    } else if (this.cameraAvailable()) {
+      void this.startCamera();
+    }
   }
 
   protected async restart(): Promise<void> {
@@ -89,18 +121,20 @@ export class Scan {
     }
   }
 
-  private async checkOnServer(file: File): Promise<void> {
-    if (this.loading()) return;
-    this.loading.set(true);
-    this.scanner?.stop();
+  private async recognize(file: File): Promise<ScannedReceipt> {
+    let raw: string;
     try {
-      this.receipts.scanned.set(await firstValueFrom(this.receipts.checkImage(file)));
-      await this.router.navigateByUrl('/budget/scan/confirm');
-    } catch (error) {
-      this.error.set(errorMessage(error));
-      this.loading.set(false);
-      if (this.cameraAvailable()) void this.startCamera();
+      raw = (await QrScanner.scanImage(file, { returnDetailedScanResult: true })).data;
+    } catch {
+      // Локально QR не нашёлся: пусть попробует сервис
+      return firstValueFrom(this.receipts.checkImage(file));
     }
+    if (!isReceiptQr(raw.trim())) throw new Error('Это не QR-код чека');
+    return firstValueFrom(this.receipts.check(raw.trim()));
+  }
+
+  private add(receipt: ScannedReceipt): void {
+    if (!this.receipts.enqueue(receipt)) throw new Error('Этот чек уже в очереди');
   }
 
   private async handle(raw: string): Promise<void> {
@@ -112,11 +146,12 @@ export class Scan {
     }
 
     this.error.set('');
+    this.failed.set([]);
     this.loading.set(true);
     this.scanner?.stop();
     try {
-      this.receipts.scanned.set(await firstValueFrom(this.receipts.check(qrraw)));
-      await this.router.navigateByUrl('/budget/scan/confirm');
+      this.add(await firstValueFrom(this.receipts.check(qrraw)));
+      await this.router.navigateByUrl(CONFIRM_URL);
     } catch (error) {
       this.error.set(errorMessage(error));
       this.loading.set(false);
