@@ -38,7 +38,7 @@
 - [x] PWA: service worker, manifest, иконки, кеш внешних шрифтов и иконок
 - [x] Нижняя навигация на шесть разделов, заглушка «В разработке»
 - [x] Слой данных: один `BudgetService` на HttpClient (как `AuthService` и `FamilyService`), стор бюджета поверх него
-- [x] слои `components/pages/stores/services/models/utils`, алиас `@/`, общие компоненты (`ScopeSwitch`, `MonthPicker`), утилиты денег и дат
+- [x] структура по фичам: `core/` (auth, family, api, layout), `shared/` (ui, pipes, utils, styles), `features/` (auth, budget, family), алиас `@/`; общие компоненты (`MonthPicker`, `Autocomplete`), утилиты денег и дат
 - [x] Деньги хранятся в копейках
 - [x] Доступность: фокус, aria, контраст
 - [x] Реальный API вместо мока (`BudgetService`; мок-данные удалены)
