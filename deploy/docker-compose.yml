@@ -39,8 +39,8 @@ services:
     environment:
       DOMAIN: ${DOMAIN:?задайте DOMAIN в deploy/.env}
     ports:
-      - "80:80"
-      - "443:443"
+      - "${HTTP_PUBLISH:-80}:80"
+      - "${HTTPS_PUBLISH:-443}:443"
     volumes:
       - caddy-data:/data
       - caddy-config:/config
