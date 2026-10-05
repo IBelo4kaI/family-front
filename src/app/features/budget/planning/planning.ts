@@ -1,5 +1,5 @@
+import { HeaderActions } from '@/core/layout/header-actions';
 import { Component, inject } from '@angular/core';
-import { PageHeader } from '@/shared/ui/page-header';
 import { RouterLink } from '@angular/router';
 import { ScopeSwitch } from '@/features/budget/ui/scope-switch';
 import { MoneyPipe } from '@/shared/pipes/money';
@@ -9,7 +9,7 @@ import { BudgetStore } from '@/features/budget/data/budget.store';
 
 @Component({
   selector: 'app-planning',
-  imports: [PageHeader, RouterLink, ScopeSwitch, MoneyPipe, ShortDatePipe],
+  imports: [HeaderActions, RouterLink, ScopeSwitch, MoneyPipe, ShortDatePipe],
   templateUrl: './planning.html',
   styleUrl: './planning.css',
 })

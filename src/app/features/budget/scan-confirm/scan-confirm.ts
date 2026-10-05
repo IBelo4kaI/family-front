@@ -3,7 +3,6 @@ import { FormField, FormRoot, form } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CategoryField } from '@/features/budget/ui/category-field';
-import { PageHeader } from '@/shared/ui/page-header';
 import { PERSONAL_MODE_ENABLED } from '@/features/budget/data/budget.constants';
 import { BudgetScope } from '@/features/budget/data/budget.model';
 import { MoneyPipe } from '@/shared/pipes/money';
@@ -14,7 +13,7 @@ import { errorMessage } from '@/shared/utils/http-error';
 
 @Component({
   selector: 'app-scan-confirm',
-  imports: [PageHeader, CategoryField, FormField, FormRoot, MoneyPipe, ShortDatePipe],
+  imports: [CategoryField, FormField, FormRoot, MoneyPipe, ShortDatePipe],
   templateUrl: './scan-confirm.html',
   styleUrls: ['../../../shared/styles/form-page.css', './scan-confirm.css'],
 })

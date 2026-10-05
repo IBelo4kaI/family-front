@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { PageHeader } from '@/shared/ui/page-header';
+import { PageHeader } from '@/core/layout/page-header';
 import { FormField, FormRoot, email, form, minLength, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';

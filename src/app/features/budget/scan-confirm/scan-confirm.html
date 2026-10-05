@@ -1,5 +1,3 @@
-<app-page-header title="Чеки" backLink="/budget/scan" backLabel="Назад к сканированию" />
-
 @for (p of receipts.queue(); track p.id) {
   <section class="card" [attr.aria-labelledby]="'receipt-' + p.id">
     <div class="head">

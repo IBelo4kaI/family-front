@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { CategoryField } from '@/features/budget/ui/category-field';
-import { PageHeader } from '@/shared/ui/page-header';
 import { FormField, FormRoot, form, max, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -15,7 +14,7 @@ const MAX_NOTIFY_DAYS = 30;
 
 @Component({
   selector: 'app-payment-form',
-  imports: [PageHeader, CategoryField, FormField, FormRoot],
+  imports: [CategoryField, FormField, FormRoot],
   templateUrl: './payment-form.html',
   styleUrl: '../../../shared/styles/form-page.css',
 })

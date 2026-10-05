@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { PageHeader } from '@/shared/ui/page-header';
 import { RouterLink } from '@angular/router';
 import { MonthPicker } from '@/shared/ui/month-picker';
 import { MoneyPipe } from '@/shared/pipes/money';
@@ -13,7 +12,7 @@ import { PERSONAL_MODE_ENABLED } from '@/features/budget/data/budget.constants';
 
 @Component({
   selector: 'app-transactions',
-  imports: [PageHeader, RouterLink, MonthPicker, MoneyPipe, ShortDatePipe],
+  imports: [RouterLink, MonthPicker, MoneyPipe, ShortDatePipe],
   templateUrl: './transactions.html',
   styleUrl: './transactions.css',
 })

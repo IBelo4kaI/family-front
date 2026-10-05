@@ -6,7 +6,8 @@ import { FamilyService } from '@/core/family/family.service';
 export const FAMILY_ROUTES: Routes = [
   {
     path: '',
-    title: 'Семья',
+    title: () => inject(FamilyService).family()?.name ?? 'Семья',
+    data: { backLink: '/budget', backLabel: 'Назад к бюджету' },
     canActivate: [() => inject(FamilyService).load().pipe(map(() => true), catchError(() => of(true)))],
     loadComponent: () => import('@/features/family/overview/overview').then((m) => m.FamilyPage),
   },

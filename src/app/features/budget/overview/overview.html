@@ -1,9 +1,9 @@
-<app-page-header title="Бюджет">
+<ng-template appHeaderActions>
   <a class="family-link" routerLink="/family" aria-label="Семья">
     <i class="fi fi-rr-users" aria-hidden="true"></i>
   </a>
   <app-scope-switch [(scope)]="store.scope" />
-</app-page-header>
+</ng-template>
 
 @if (personalEnabled) {
   <p class="sr-only" aria-live="polite">{{ store.scope() === 'family' ? 'Семейный режим' : 'Личный режим' }}</p>

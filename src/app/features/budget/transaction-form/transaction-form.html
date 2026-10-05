@@ -1,9 +1,3 @@
-<app-page-header
-  [title]="isEdit ? 'Редактирование транзакции' : 'Новая транзакция'"
-  [backLink]="isEdit ? '/budget/transactions' : '/budget'"
-  [backLabel]="isEdit ? 'Назад к транзакциям' : 'Назад к бюджету'"
-/>
-
 <form [formRoot]="transactionForm">
   <fieldset>
     <legend>Тип</legend>

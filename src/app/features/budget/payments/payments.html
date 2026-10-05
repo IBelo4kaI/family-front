@@ -1,6 +1,6 @@
-<app-page-header title="Платежи" backLink="/budget" backLabel="Назад к бюджету">
+<ng-template appHeaderActions>
   <app-scope-switch [(scope)]="store.scope" />
-</app-page-header>
+</ng-template>
 
 <app-payment-list
   class="card"

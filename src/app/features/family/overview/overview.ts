@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { PageHeader } from '@/shared/ui/page-header';
 import { Invite } from '@/core/family/family.model';
 import { AuthService } from '@/core/auth/auth.service';
 import { FamilyService } from '@/core/family/family.service';
@@ -8,7 +7,7 @@ import { errorMessage } from '@/shared/utils/http-error';
 
 @Component({
   selector: 'app-family',
-  imports: [PageHeader, DatePipe],
+  imports: [DatePipe],
   templateUrl: './overview.html',
   styleUrl: './overview.css',
 })

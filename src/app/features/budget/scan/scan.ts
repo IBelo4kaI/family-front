@@ -2,7 +2,6 @@ import { Component, DestroyRef, computed, ElementRef, afterNextRender, inject, s
 import { Router, RouterLink } from '@angular/router';
 import QrScanner from 'qr-scanner';
 import { firstValueFrom } from 'rxjs';
-import { PageHeader } from '@/shared/ui/page-header';
 import { ReceiptService } from '@/features/budget/data/receipt.service';
 import { ScannedReceipt } from '@/features/budget/data/receipt.model';
 import { errorMessage } from '@/shared/utils/http-error';
@@ -20,7 +19,7 @@ const isReceiptQr = (raw: string) => /(^|&)t=/.test(raw) && /(^|&)fn=/.test(raw)
 
 @Component({
   selector: 'app-scan',
-  imports: [PageHeader, RouterLink],
+  imports: [RouterLink],
   templateUrl: './scan.html',
   styleUrl: './scan.css',
 })

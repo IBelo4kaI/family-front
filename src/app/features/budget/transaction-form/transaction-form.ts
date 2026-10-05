@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { FormField, FormRoot, form, max, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryField } from '@/features/budget/ui/category-field';
-import { PageHeader } from '@/shared/ui/page-header';
 import { firstValueFrom } from 'rxjs';
 import { todayIso } from '@/shared/utils/iso-date';
 import { toKopecks, toRubles } from '@/shared/utils/money';
@@ -14,7 +13,7 @@ const MAX_AMOUNT = 999_999_999.99;
 
 @Component({
   selector: 'app-transaction-form',
-  imports: [PageHeader, CategoryField, FormField, FormRoot],
+  imports: [CategoryField, FormField, FormRoot],
   templateUrl: './transaction-form.html',
   styleUrl: '../../../shared/styles/form-page.css',
 })

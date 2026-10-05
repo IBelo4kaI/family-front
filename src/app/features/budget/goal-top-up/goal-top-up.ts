@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { PageHeader } from '@/shared/ui/page-header';
 import { FormField, FormRoot, form, max, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -12,7 +11,7 @@ const BACK_URL = '/budget/planning';
 
 @Component({
   selector: 'app-goal-top-up',
-  imports: [PageHeader, FormField, FormRoot, MoneyPipe],
+  imports: [FormField, FormRoot, MoneyPipe],
   templateUrl: './goal-top-up.html',
   styleUrl: '../../../shared/styles/form-page.css',
 })

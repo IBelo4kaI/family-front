@@ -1,5 +1,5 @@
+import { HeaderActions } from '@/core/layout/header-actions';
 import { Component, inject } from '@angular/core';
-import { PageHeader } from '@/shared/ui/page-header';
 import { RouterLink } from '@angular/router';
 import { MonthPicker } from '@/shared/ui/month-picker';
 import { ScopeSwitch } from '@/features/budget/ui/scope-switch';
@@ -13,7 +13,8 @@ import { UpcomingPayments } from '@/features/budget/ui/upcoming-payments';
 
 @Component({
   selector: 'app-budget',
-  imports: [PageHeader, 
+  imports: [
+    HeaderActions,
     RouterLink,
     ScopeSwitch,
     MonthPicker,
